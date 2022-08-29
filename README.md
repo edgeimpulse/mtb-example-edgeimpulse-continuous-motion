@@ -1,23 +1,17 @@
-# Firmware Infineon/Cypress PSoC6 Internal
+# EdgeImpulse example of Continious Motion Recognition using Infineon PSoC6
 
-Edge Impulse enables developers to create the next generation of intelligent device solutions with embedded machine learning. This repository contains the Edge Impulse firmware for Infineon/Cypress PSoC62 43012 Pioneer Kit with IoT SENSE. This device supports all of Edge Impulse's device features, including ingestion, remote management and inferencing.
+Edge Impulse enables developers to create the next generation of intelligent device solutions with embedded machine learning. This repository contains the Edge Impulse firmware for Infineon PSoC62 43012 Pioneer Kit with IoT SENSE Expansion Kit. This device supports all of Edge Impulse's device features, including ingestion, remote management and inferencing.
 
 ## Introduction
 
 This project supports:
-* Data ingestion using the [EdgeImpulse Studio](https://studio.edgeimpulse.com)
+* Live inference using the [EdgeImpulse Studio](https://studio.edgeimpulse.com)
+* Data ingestion with every sensor of the Infineon IoT Sense Expansion Kit (see Hardware)
+    - Innertial sensor, BMX160 Accelerometer
+    - Barometer sensor, DPS310 Barometer + Temperature sensor
+    - Microphone, Dual PDM Mics
 * Sensor Fusion for Inertial and Environment sensor
-* Live inference, including of a Sensor Fusion model
-* Data sampling from the BMX160 IMU and DPS310 Barometer+Temperature sensor on the IoT SENSE board
 * Storing samples on the external NOR Flash using the QSPI inteface
-
-Project dependencies (all libraries are provided in this code repository):
-* PSoC6 io_retarget library for debug UART functionality
-* PSoC6 serial-flash library for accessing NOR Flash over QSPI interface
-* PSoC6 SPI library for hardware-driven Master SPI interface needed by the BMX160 driver
-* BMX160 driver with Bosch BMI160 and BMM150 library for IMU functionality
-* Fix for BMX160 CHIPID (see more in Troubleshooting)
-* Buffix for DPS310 configuration
 
 ## Requirements
 
@@ -44,20 +38,6 @@ Project dependencies (all libraries are provided in this code repository):
     ```
     make getlibs
     make build
-    ```
-
-### Docker
-
-1. Build docker image
-
-    ```
-    docker build -t edge-impulse-infineon .
-    ```
-
-1. Build firmware
-
-    ```
-    docker run --rm -v $PWD:/app edge-impulse-infineon
     ```
 
 ## Flashing
@@ -110,13 +90,8 @@ Please visit this link for the [Infineon ModusToolbox IDE guide](https://www.inf
     ![](docs/blink.gif)
 
 
-## Troubleshooting / Known issues
+## Troubleshooting
 
-### BMX160 issues
+### BMX160 chip ID
 
-This project includes a modified version of the BMI160 library in order to modify the expect CHIPID from 0xD1(BMI160) to the correct 0xD8(BMX160). In case ModusToolbox updates the BMI160 library, please make sure to check the BMI160_CHIP_ID definition in `bmi160_defs.h` file.
-
-The project also addresses the following BMX160 specifics for out-of-the-box experience:
-- BMX160 needs a rising edge on Chip Select early after power-on.
-- Do not assign Chip select pin to the SPI driver, instead assign it to the BMX160 driver.
-- Do not work at the recommended 10MHz SPI or expect scrambled bits, 8MHz provides stable output.
+This project includes a modified version of the BMI160 library in order to have the expected CHIPID for BMX160(0xD8). The CHIPID was updated at BMI160_CHIP_ID in the `bmi160_defs.h` file.
