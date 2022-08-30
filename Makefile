@@ -96,7 +96,7 @@ INCLUDE=ei-model/
 
 # Add additional defines to the build process (without a leading -D).
 DEFINES=
-DEFINES += __STACK_SIZE=0x20000
+#DEFINES += __STACK_SIZE=0x20000
 DEFINES += TF_LITE_DISABLE_X86_NEON=1
 #DEFINES += EIDSP_SIGNAL_C_FN_POINTER=1
 #DEFINES += EI_C_LINKAGE=1
