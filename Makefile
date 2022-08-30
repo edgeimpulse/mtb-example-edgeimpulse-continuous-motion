@@ -40,7 +40,7 @@ TARGET=CY8CKIT-062S2-43012
 # 
 # If APPNAME is edited, ensure to update or regenerate launch 
 # configurations for your IDE.
-APPNAME=firmware-infineon-cy8ckit-062s2
+APPNAME=mtb-example-edgeimpulse-continuous-motion
 
 # Name of toolchain to use. Options include:
 #
