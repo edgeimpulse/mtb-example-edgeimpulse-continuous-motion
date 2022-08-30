@@ -8,9 +8,9 @@ This project supports:
 * Live inference using the [EdgeImpulse Studio](https://studio.edgeimpulse.com)
 * Data ingestion with every sensor of the Infineon IoT Sense Expansion Kit (see Hardware)
     - Innertial sensor, BMX160 Accelerometer
-    - Barometer sensor, DPS310 Barometer + Temperature sensor
+    - Environmental sensor, DPS310 Barometer + Temperature sensor
     - Microphone, Dual PDM Mics
-* Sensor Fusion for Inertial and Environment sensor
+* Sensor Fusion for Inertial and Environmental sensor
 * Storing samples on the external NOR Flash using the QSPI inteface
 
 ## Requirements
