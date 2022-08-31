@@ -146,7 +146,8 @@ LDLIBS=
 LINKER_SCRIPT=
 
 # Custom pre-build commands to run.
-PREBUILD=/bin/bash fix-sdk-cc-files.sh
+PREBUILD=/bin/bash fix-sdk-cc-files.sh;
+PREBUILD+=cp patch/bmi160_defs.h ../mtb_shared/BMI160_driver/bmi160_v3.9.1/bmi160_defs.h
 
 # Custom post-build commands to run.
 POSTBUILD=
