@@ -1,4 +1,4 @@
-/* Edge Impulse inferencing library
+/*
  * Copyright (c) 2022 EdgeImpulse Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -6,12 +6,13 @@
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an "AS
+ * IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef EI_PERFORMANCE_CALIBRATION_H
@@ -42,8 +43,11 @@ public:
             return;
         }
 
+        this->_score_array = nullptr;
+        this->_running_sum = nullptr;
         this->_detection_threshold = config->detection_threshold;
         this->_suppression_flags = config->suppression_flags;
+        this->_should_boost = config->is_configured;
         this->_n_labels = n_labels;
 
         /* Determine sample length in ms */
@@ -107,6 +111,11 @@ public:
         }
     }
 
+    bool should_boost()
+    {
+        return this->_should_boost;
+    }
+
     int32_t trigger(ei_impulse_result_classification_t *scores)
     {
         int32_t recognized_event = EI_PC_RET_NO_EVENT_DETECTED;
@@ -139,8 +148,14 @@ public:
             scores[i].value = this->_running_sum[i] / this->_n_scores_in_array;
 
             if (scores[i].value > current_top_score) {
-                current_top_score = scores[i].value;
-                current_top_index = i;
+                if(this->_suppression_flags == 0) {
+                    current_top_score = scores[i].value;
+                    current_top_index = i;
+                }
+                else if(this->_suppression_flags & (1 << i)) {
+                    current_top_score = scores[i].value;
+                    current_top_index = i;
+                }
             }
         }
 
@@ -175,6 +190,7 @@ public:
 private:
     uint32_t _average_window_duration_samples;
     float _detection_threshold;
+    bool _should_boost;
     uint32_t _suppression_samples;
     uint32_t _suppression_count;
     uint32_t _suppression_flags;

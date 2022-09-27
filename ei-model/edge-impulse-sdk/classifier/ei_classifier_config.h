@@ -1,4 +1,4 @@
-/* Edge Impulse inferencing library
+/*
  * Copyright (c) 2022 EdgeImpulse Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -6,12 +6,13 @@
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an "AS
+ * IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _EI_CLASSIFIER_CONFIG_H_
@@ -61,6 +62,24 @@
 #define EI_CLASSIFIER_TFLITE_ENABLE_ARC             0
 #endif // CPU_ARC
 #endif // EI_CLASSIFIER_TFLITE_ENABLE_ARC
+
+#ifndef EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN
+    #if defined(ESP32)
+        #define EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN      1
+    #endif // ESP32 check
+#endif
+
+// no include checks in the compiler? then just include metadata and then ops_define (optional if on EON model)
+#ifndef __has_include
+    #include "model-parameters/model_metadata.h"
+    #if (EI_CLASSIFIER_INFERENCING_ENGINE == EI_CLASSIFIER_TFLITE) && (EI_CLASSIFIER_COMPILED == 1)
+        #include "tflite-model/trained_model_ops_define.h"
+    #endif
+#else
+    #if __has_include("tflite-model/trained_model_ops_define.h")
+    #include "tflite-model/trained_model_ops_define.h"
+    #endif
+#endif // __has_include
 
 // clang-format on
 #endif // _EI_CLASSIFIER_CONFIG_H_
