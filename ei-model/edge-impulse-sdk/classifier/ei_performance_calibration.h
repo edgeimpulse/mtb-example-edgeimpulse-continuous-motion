@@ -42,8 +42,11 @@ public:
             return;
         }
 
+        this->_score_array = nullptr;
+        this->_running_sum = nullptr;
         this->_detection_threshold = config->detection_threshold;
         this->_suppression_flags = config->suppression_flags;
+        this->_should_boost = config->is_configured;
         this->_n_labels = n_labels;
 
         /* Determine sample length in ms */
@@ -107,6 +110,11 @@ public:
         }
     }
 
+    bool should_boost()
+    {
+        return this->_should_boost;
+    }
+
     int32_t trigger(ei_impulse_result_classification_t *scores)
     {
         int32_t recognized_event = EI_PC_RET_NO_EVENT_DETECTED;
@@ -139,8 +147,14 @@ public:
             scores[i].value = this->_running_sum[i] / this->_n_scores_in_array;
 
             if (scores[i].value > current_top_score) {
-                current_top_score = scores[i].value;
-                current_top_index = i;
+                if(this->_suppression_flags == 0) {
+                    current_top_score = scores[i].value;
+                    current_top_index = i;
+                }
+                else if(this->_suppression_flags & (1 << i)) {
+                    current_top_score = scores[i].value;
+                    current_top_index = i;
+                }
             }
         }
 
@@ -175,6 +189,7 @@ public:
 private:
     uint32_t _average_window_duration_samples;
     float _detection_threshold;
+    bool _should_boost;
     uint32_t _suppression_samples;
     uint32_t _suppression_count;
     uint32_t _suppression_flags;

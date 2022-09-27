@@ -36,7 +36,7 @@ static uint64_t last_inference_ts = 0;
 static bool continuous_mode = false;
 static bool debug_mode = false;
 
-static void timing_and_classification(ei_impulse_result_t* result)
+static void display_results(ei_impulse_result_t* result)
 {
     ei_printf("Predictions (DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \n",
         result->timing.dsp, result->timing.classification, result->timing.anomaly);
@@ -50,28 +50,6 @@ static void timing_and_classification(ei_impulse_result_t* result)
         ei_printf_float(result->anomaly);
         ei_printf("\r\n");
 #endif
-}
-
-static void display_results(ei_impulse_result_t* result)
-{
-    if(continuous_mode == true) {
-        if(result->label_detected >= 0) {
-            ei_printf("LABEL DETECTED : %s\r\n", result->classification[result->label_detected].label);
-            timing_and_classification(result);
-        }
-        else {
-            const char spinner[] = {'/', '-', '\\', '|'};
-            static char spin = 0;
-            ei_printf("Running inference %c\r", spinner[spin]);
-
-            if(++spin >= sizeof(spinner)) {
-                spin = 0;
-            }
-        }
-    }
-    else {
-        timing_and_classification(result);
-    }
 }
 
 void ei_run_impulse(void)
