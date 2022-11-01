@@ -146,7 +146,7 @@ LDLIBS=
 LINKER_SCRIPT=
 
 # Custom pre-build commands to run.
-PREBUILD=/bin/bash fix-sdk-cc-files.sh
+PREBUILD=
 
 # Custom post-build commands to run.
 POSTBUILD=
