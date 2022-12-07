@@ -1,0 +1,12 @@
+diff --git a/libs/BMI160_driver/bmi160_v3.9.1/bmi160_defs.h b/libs/BMI160_driver/bmi160_v3.9.1/bmi160_defs.h
+--- a/libs/BMI160_driver/bmi160_v3.9.1/bmi160_defs.h
++++ b/libs/BMI160_driver/bmi160_v3.9.1/bmi160_defs.h
+@@ -357,7 +357,7 @@
+ #define BMI160_W_ACCEl_SELF_TEST_FAIL             INT8_C(2)
+ 
+ /** BMI160 unique chip identifier */
+-#define BMI160_CHIP_ID                            UINT8_C(0xD1)
++#define BMI160_CHIP_ID                            UINT8_C(0xD8)
+ 
+ /** Soft reset command */
+ #define BMI160_SOFT_RESET_CMD                     UINT8_C(0xb6)

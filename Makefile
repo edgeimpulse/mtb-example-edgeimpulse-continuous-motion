@@ -152,7 +152,7 @@ LDLIBS=
 LINKER_SCRIPT=
 
 # Custom pre-build commands to run.
-PREBUILD=
+PREBUILD=/bin/bash fix-bmx160-chipid.sh;
 
 # Custom post-build commands to run.
 POSTBUILD=
